@@ -1,39 +1,32 @@
 package com.tops.learnnew
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tops.learnnew.databinding.ActivityMainBinding
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-
-    //            ========>   https://chatgpt.com/share/68c78086-fdd0-8010-9b4f-48c5fbc1dab7
-
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-    private lateinit var waveformView: View
-    private lateinit var startRecBtn: Button
-    private lateinit var stopRecBtn: Button
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     private var isRecording = false
     private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val bottomSheet = findViewById<LinearLayout>(R.id.bottomSheet)
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        waveformView = findViewById(R.id.waveformView)
-        startRecBtn = findViewById(R.id.startRecBtn)
-        stopRecBtn = findViewById(R.id.stopRecBtn)
+        // Initialize view binding
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Default settings
+        // Setup BottomSheet
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.peekHeight = 150
         bottomSheetBehavior.isHideable = false
 
@@ -58,19 +51,24 @@ class MainActivity : AppCompatActivity() {
                     val minHeight = 200
                     val maxHeight = 600
                     val newHeight = (minHeight + (maxHeight - minHeight) * slideOffset).toInt()
-                    val params = waveformView.layoutParams
+                    val params = binding.waveformView.layoutParams
                     params.height = newHeight.coerceAtLeast(minHeight)
-                    waveformView.layoutParams = params
+                    binding.waveformView.layoutParams = params
                 }
             }
         })
 
+        binding.myswitch.setOnClickListener {
+           val intent = Intent(this, RecordingActivity::class.java)
+            startActivity(intent)
+        }
+
         // Start Recording
-        startRecBtn.setOnClickListener {
+        binding.startRecBtn.setOnClickListener {
             isRecording = true
-            waveformView.visibility = View.VISIBLE
-            startRecBtn.visibility = View.GONE
-            stopRecBtn.visibility = View.VISIBLE
+            binding.waveformView.visibility = View.VISIBLE
+            binding.startRecBtn.visibility = View.GONE
+            binding.stopRecBtn.visibility = View.VISIBLE
 
             // Move sheet to half-expanded
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
@@ -80,11 +78,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Stop Recording
-        stopRecBtn.setOnClickListener {
+        binding.stopRecBtn.setOnClickListener {
             isRecording = false
-            waveformView.visibility = View.GONE
-            startRecBtn.visibility = View.VISIBLE
-            stopRecBtn.visibility = View.GONE
+            binding.waveformView.visibility = View.GONE
+            binding.startRecBtn.visibility = View.VISIBLE
+            binding.stopRecBtn.visibility = View.GONE
 
             // Allow collapse again
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -96,9 +94,9 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 if (isRecording) {
                     // Animate waveform height randomly (simulating amplitude)
-                    val params = waveformView.layoutParams
+                    val params = binding.waveformView.layoutParams
                     params.height = 200 + Random.nextInt(200)
-                    waveformView.layoutParams = params
+                    binding.waveformView.layoutParams = params
                     handler.postDelayed(this, 300)
                 }
             }

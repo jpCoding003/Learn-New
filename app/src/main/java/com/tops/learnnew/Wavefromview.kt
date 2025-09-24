@@ -2,10 +2,10 @@ package com.tops.learnnew
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.math.min
 
 class WaveformView @JvmOverloads constructor(
@@ -13,22 +13,25 @@ class WaveformView @JvmOverloads constructor(
 ) : View(context, attrs) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = 6f
-        isAntiAlias = true
+        color = Color.RED            // ✅ Red wave
+        strokeWidth = 4f             // thinner for smoother waves
+        style = Paint.Style.STROKE
     }
 
-    // thread-safe queue of amplitudes (0f..1f)
+    // Thread-safe deque of amplitudes (0f..1f)
     private val amplitudes = ArrayDeque<Float>() // newest at end
-    private val maxBuckets = 120 // how many bars to draw (tweak to your width)
+    private val maxBuckets = 200 // how many bars fit on screen
 
-    // call this from background or UI thread
+    /**
+     * Add a new amplitude value (0f..1f).
+     * Call this from your AudioRecord callback (scaled).
+     */
     fun addAmplitude(a: Float) {
         val amplitude = a.coerceIn(0f, 1f)
         synchronized(amplitudes) {
             amplitudes.addLast(amplitude)
-            if (amplitudes.size > maxBuckets) amplitudes.removeFirst()
+            if (amplitudes.size > maxBuckets) amplitudes.removeFirst() // keep left→right scroll
         }
-        // fast redraw on UI thread
         postInvalidateOnAnimation()
     }
 
@@ -39,6 +42,7 @@ class WaveformView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         val w = width.toFloat()
         val h = height.toFloat()
         val centerY = h / 2f
@@ -47,15 +51,22 @@ class WaveformView @JvmOverloads constructor(
         if (list.isEmpty()) return
 
         val spacing = w / list.size
-        val barWidth = spacing * 0.6f
+
+        // Draw as polyline from left → right
+        var prevX = 0f
+        var prevY = centerY
 
         for (i in list.indices) {
-            val x = i * spacing + spacing / 2
+            val x = i * spacing
             val amp = list[i]
-            val barHeight = amp * h // full height scaled by amplitude
-            val top = centerY - barHeight / 2
-            val bottom = centerY + barHeight / 2
-            canvas.drawLine(x, top, x, bottom, paint)
+            val y = centerY - (amp * (h / 2f)) // amplitude to vertical offset
+
+            if (i > 0) {
+                canvas.drawLine(prevX, prevY, x, y, paint)
+            }
+
+            prevX = x
+            prevY = y
         }
     }
 }

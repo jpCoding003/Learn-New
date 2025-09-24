@@ -9,7 +9,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ECEFF1" />
+        android:background="#ECEFF1" >
+
+        <Button
+            android:id="@+id/myswitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="switch"
+            />
+    </FrameLayout>
 
     <!-- BottomSheet -->
     <LinearLayout
