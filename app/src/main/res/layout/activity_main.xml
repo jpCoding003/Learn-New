@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,8 +16,8 @@
             android:id="@+id/myswitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="switch"
-            />
+            android:text="switch"/>
+
     </FrameLayout>
 
     <!-- BottomSheet -->
@@ -52,14 +53,17 @@
         </LinearLayout>
 
         <!-- Waveform View (hidden until recording) -->
-        <View
+        <Button
+            android:id="@+id/btnconvert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Currency Converter" />
+
+        <com.tops.learnnew.WaveformView
             android:id="@+id/waveformView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="20dp"
-            android:background="#90CAF9"
             android:visibility="gone" />
-
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

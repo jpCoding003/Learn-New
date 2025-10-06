@@ -6,31 +6,25 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import kotlin.math.min
 
 class WaveformView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.RED            // ✅ Red wave
-        strokeWidth = 4f             // thinner for smoother waves
+        color = Color.RED
+        strokeWidth = 4f
         style = Paint.Style.STROKE
     }
 
-    // Thread-safe deque of amplitudes (0f..1f)
-    private val amplitudes = ArrayDeque<Float>() // newest at end
-    private val maxBuckets = 200 // how many bars fit on screen
+    private val amplitudes = ArrayDeque<Float>()
+    private val maxBuckets = 120
 
-    /**
-     * Add a new amplitude value (0f..1f).
-     * Call this from your AudioRecord callback (scaled).
-     */
     fun addAmplitude(a: Float) {
         val amplitude = a.coerceIn(0f, 1f)
         synchronized(amplitudes) {
             amplitudes.addLast(amplitude)
-            if (amplitudes.size > maxBuckets) amplitudes.removeFirst() // keep left→right scroll
+            if (amplitudes.size > maxBuckets) amplitudes.removeFirst()
         }
         postInvalidateOnAnimation()
     }
@@ -51,22 +45,11 @@ class WaveformView @JvmOverloads constructor(
         if (list.isEmpty()) return
 
         val spacing = w / list.size
-
-        // Draw as polyline from left → right
-        var prevX = 0f
-        var prevY = centerY
-
         for (i in list.indices) {
-            val x = i * spacing
+            val x = i * spacing + spacing / 2f // center each bar in its slot
             val amp = list[i]
-            val y = centerY - (amp * (h / 2f)) // amplitude to vertical offset
-
-            if (i > 0) {
-                canvas.drawLine(prevX, prevY, x, y, paint)
-            }
-
-            prevX = x
-            prevY = y
+            val barHeight = amp * (h / 2f)
+            canvas.drawLine(x, centerY - barHeight, x, centerY + barHeight, paint)
         }
     }
 }
