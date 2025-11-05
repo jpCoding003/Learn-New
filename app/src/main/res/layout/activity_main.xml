@@ -17,6 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="switch"/>
+        <Button
+            android:id="@+id/Drawer"
+            android:layout_margin="75dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="drawer"/>
 
     </FrameLayout>
 

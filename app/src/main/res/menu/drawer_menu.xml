@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/er">
+
+        <item android:id="@+id/btn1"
+            android:title="First"/>
+
+        <item android:id="@+id/btn2"
+            android:title="First"/>
+
+        <item android:id="@+id/btn3"
+            android:title="First"/>
+
+        <item android:id="@+id/btn4"
+            android:title="four"/>
+    </group>
+
+
+    <group android:id="@+id/ert">
+        <item android:id="@+id/btn5"
+            android:title="First"/>
+
+        <item android:id="@+id/btn6"
+            android:title="First"/>
+        <item android:id="@+id/btn7"
+            android:title="First"/>
+    </group>
+
+
+    <group android:id="@+id/erty">
+        <item android:id="@+id/btn8"
+            android:title="First"/>
+        <item android:id="@+id/btn9"
+            android:title="First"/>
+        <item android:id="@+id/btn10"
+            android:title="First"/>
+    </group>
+
+
+
+
+
+
+
+
+</menu>

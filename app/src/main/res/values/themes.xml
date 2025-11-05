@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.LearnNew" parent="Base.Theme.LearnNew" />
+    <style name="Theme.LearnNew.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.LearnNew.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.LearnNew.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

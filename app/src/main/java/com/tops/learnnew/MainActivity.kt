@@ -23,6 +23,7 @@ import kotlin.math.min
 class MainActivity : AppCompatActivity() {
 
     // API :   "https://api.frankfurter.app/"
+//      https://youtu.be/uY9iZiamyZs?si=hqf0_p7pwhbCG_Uq
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.peekHeight = 150
         bottomSheetBehavior.isHideable = false
+
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.Drawer.setOnClickListener { startActivity(Intent(this,DrawerActivity::class.java)) }
         // Start Recording
         binding.startRecBtn.setOnClickListener {
             startRecording()
